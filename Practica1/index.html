@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matriz de decisión ERP - SGE UT1 Actividad 1</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Matriz de decisión para la selección de un ERP</h1>
+    <p>Sistemas de Gestión Empresarial · UT1 · Actividad evaluable 01 · Odoo Enterprise, Holded y MS Dynamics 365 Business Central</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Cómo funciona</h2>
+      <p class="nota">
+        Cada empresa tiene su propia matriz. Cambia las valoraciones (0 a 3) con los desplegables y los totales se recalculan.
+        Puntuación ponderada = (Valoración × Peso) / 3. La suma máxima es 100 puntos.
+        <strong>Escala:</strong> 0 No cumple · 1 Cumple parcialmente · 2 Cumple · 3 Cumple muy bien.
+      </p>
+      <p id="aviso-pendientes" class="aviso"></p>
+      <nav id="indice"></nav>
+    </section>
+
+    <div id="empresas"></div>
+
+    <section class="panel">
+      <h2>Herramientas utilizadas y recomendaciones de IA descartadas</h2>
+      <p class="nota">Este apartado se desarrolla en <code>docs/justificacion.md</code>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Actividad realizada por: <em>(tu nombre)</em></p>
+  </footer>
+
+  <script src="js/datos.js"></script>
+  <script src="js/matriz.js"></script>
+</body>
+</html>

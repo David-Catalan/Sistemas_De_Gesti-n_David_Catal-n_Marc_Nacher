@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Actividad 1 - Selección de un ERP</title>
+<style>
+  @page { size: A4; margin: 13mm 15mm; }
+  body { font-family: "Segoe UI", Arial, sans-serif; font-size: 10pt; line-height: 1.33; color: #222; }
+  h1 { font-size: 18pt; color: #1f4e79; margin: 0 0 2px; }
+  h2 { font-size: 13pt; color: #1f4e79; border-bottom: 2px solid #1f4e79; padding-bottom: 2px; margin: 16px 0 6px; }
+  h3 { font-size: 11pt; color: #1f4e79; margin: 10px 0 2px; }
+  p { margin: 4px 0; }
+  .meta { color: #555; margin-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: 9.5pt; }
+  th, td { border: 1px solid #c9d1d9; padding: 4px 7px; text-align: left; }
+  th { background: #e8eef4; }
+  ul { margin: 3px 0; padding-left: 18px; }
+  li { margin-bottom: 3px; }
+  .fuente { font-size: 8.5pt; color: #444; word-break: break-all; }
+  img { width: 100%; border: 1px solid #c9d1d9; }
+  .salto { page-break-before: always; }
+  a { color: #1f4e79; }
+</style>
+</head>
+<body>
+
+<h1>Actividad 1: Selección de un ERP</h1>
+<div class="meta">Sistemas de Gestión Empresarial · UT1 · Alumno/a: <em>(tu nombre)</em> · Fecha: <em>(fecha)</em></div>
+
+<h2>1. Justificación</h2>
+
+<p>Para la actividad hice una matriz en HTML y JavaScript con los criterios y pesos del enunciado, una por cada empresa. Se pueden cambiar las notas y los pesos y el total se calcula solo con (valoración × peso) / 3. Comparé Odoo Enterprise, Holded y Business Central. Para poner las notas busqué precios y funciones en las webs de cada ERP, y calculé el coste a 5 años como cuota × 60 meses + implantación.</p>
+
+<table>
+  <tr><th>Empresa</th><th>Odoo</th><th>Holded</th><th>Business Central</th><th>Elegido</th></tr>
+  <tr><td>Supermercado La Plaza</td><td><strong>85,00</strong></td><td>81,67</td><td>48,33</td><td>Odoo</td></tr>
+  <tr><td>Reformas Levante</td><td><strong>88,33</strong></td><td>75,00</td><td>66,67</td><td>Odoo</td></tr>
+</table>
+
+<h3>Supermercado La Plaza: Odoo</h3>
+<p>Un supermercado con 2.500 productos necesita controlar el stock y las caducidades, y Odoo lo trae de serie. Además tiene TPV, compras y facturación en el mismo programa. Cuesta unos 11.470 € en 5 años, más que Holded (7.640 €), pero la diferencia no es mucha. Descarté Business Central porque salía por unos 37.000 €, que es demasiado para 5 usuarios.</p>
+
+<h3>Reformas Levante: Odoo</h3>
+<p>La empresa lleva 15-20 obras a la vez con Excel y correos, así que necesita tener en un solo sitio el CRM, las compras, las horas y los costes de cada obra. Odoo lo hace con cuentas analíticas y partes de horas, y tiene partners en Valencia. Sale por unos 81.880 € en 5 años. Business Central también valdría, pero cuesta bastante más (unos 134.000 €), y Holded se queda corto para controlar los costes por obra.</p>
+
+<h3>Dos puntos importantes de Odoo</h3>
+<ul>
+  <li><strong>Caducidades.</strong> En la documentación oficial, el módulo de Inventario permite poner fechas de caducidad a los lotes (caducidad, consumo preferente, retirada y alerta), y con la estrategia FEFO sale antes lo que caduca antes. Es justo lo que necesita el supermercado.<br>
+  <span class="fuente"><a href="https://www.odoo.com/documentation/master/applications/inventory_and_mrp/inventory/product_management/product_tracking/expiration_dates.html">odoo.com/documentation/master/.../expiration_dates.html</a></span></li>
+  <li><strong>Veri*Factu.</strong> Según el foro de Odoo, el módulo de Veri*Factu solo está en la edición Enterprise (versiones 17 y 18), no en la Community. Por eso elegí Enterprise.<br>
+  <span class="fuente"><a href="https://www.odoo.com/forum/help-1/verifactu-module-in-oca-for-spain-281166">odoo.com/forum/help-1/verifactu-module-in-oca-for-spain-281166</a></span></li>
+</ul>
+
+<h3>Dos puntos importantes de Business Central</h3>
+<ul>
+  <li><strong>Proyectos.</strong> Microsoft explica que tiene un módulo de proyectos con presupuesto por tareas, recursos, partes de horas, facturación al cliente y control del trabajo en curso. Le vendría bien a Reformas Levante, aunque no habla de certificaciones de obra.<br>
+  <span class="fuente"><a href="https://learn.microsoft.com/en-us/training/modules/intro-dynamics-365-business-central/8-administer-jobs">learn.microsoft.com/en-us/training/modules/intro-dynamics-365-business-central/8-administer-jobs</a></span></li>
+  <li><strong>Veri*Factu.</strong> Tiene un modo Verifactu integrado que envía las facturas a la AEAT y añade el QR. Según el plan de Microsoft estaba previsto para septiembre de 2026, pero esa página está archivada desde octubre de 2026, así que habría que mirar la documentación actual. Por ser tan nuevo le puse menos nota en normativa.<br>
+  <span class="fuente"><a href="https://learn.microsoft.com/en-us/dynamics365/release-plan/2026wave1/smb/dynamics365-business-central/enable-embedded-verifactu-mode-spain">learn.microsoft.com/en-us/dynamics365/release-plan/2026wave1/.../enable-embedded-verifactu-mode-spain</a></span></li>
+</ul>
+
+<h3>A tener en cuenta</h3>
+<p>El coste de implantación y formación lo estimé yo, no son precios oficiales. Los precios de Odoo los saqué de oec.sh porque odoo.com no me dejaba leerlo, y el de Business Central estaba en dólares y lo tomé como euros. He usado una IA (Claude) para buscar y resumir información, y los datos de los enlaces de arriba los comprobé en las propias páginas.</p>
+
+<h2 class="salto">2. Capturas de las matrices</h2>
+<h3>Supermercado La Plaza</h3>
+<img src="../capturas/matriz_empresa1.png" alt="Matriz del supermercado">
+
+<h3 class="salto">Reformas Levante</h3>
+<img src="../capturas/matriz_empresa2.png" alt="Matriz de Reformas Levante">
+
+</body>
+</html>

@@ -12,6 +12,10 @@ function ponderada(valoracion, peso) {
   return (valoracion * peso) / 3;
 }
 
+function euros(n) {
+  return n.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
 function formato(n) {
   return n.toFixed(2).replace(".", ",");
 }
@@ -26,6 +30,10 @@ function el(tag, clase, texto) {
 
 function construirEmpresa(clave) {
   const empresa = EMPRESAS[clave];
+  if (!empresa.pesos) {
+    empresa.pesos = {};
+    CRITERIOS.forEach(function (c) { empresa.pesos[c.id] = c.peso; });
+  }
   const seccion = el("section", "panel");
   seccion.id = clave;
 
@@ -49,7 +57,21 @@ function construirEmpresa(clave) {
   CRITERIOS.forEach(function (c) {
     const tr = el("tr");
     tr.appendChild(el("td", "criterio", c.nombre));
-    tr.appendChild(el("td", "peso", String(c.peso)));
+    const tdPeso = el("td", "peso");
+    const inpPeso = el("input");
+    inpPeso.type = "number";
+    inpPeso.min = "0";
+    inpPeso.max = "100";
+    inpPeso.step = "1";
+    inpPeso.value = empresa.pesos[c.id];
+    inpPeso.title = "Peso del criterio (editable)";
+    inpPeso.addEventListener("input", function () {
+      const v = parseFloat(inpPeso.value);
+      empresa.pesos[c.id] = isNaN(v) || v < 0 ? 0 : v;
+      recalcular(clave);
+    });
+    tdPeso.appendChild(inpPeso);
+    tr.appendChild(tdPeso);
 
     ERPS.forEach(function (erp, i) {
       const td = el("td");
@@ -78,7 +100,8 @@ function construirEmpresa(clave) {
   const tfoot = el("tfoot");
   const filaTot = el("tr");
   filaTot.appendChild(el("td", "criterio", "PUNTUACIÓN TOTAL PONDERADA"));
-  filaTot.appendChild(el("td", "", "100"));
+  const tdSumaPesos = el("td", "suma-pesos", "100");
+  filaTot.appendChild(tdSumaPesos);
   ERPS.forEach(function (erp, i) {
     const td = el("td", "total", "0");
     td.dataset.erp = i;
@@ -90,6 +113,37 @@ function construirEmpresa(clave) {
   wrap.appendChild(tabla);
   seccion.appendChild(wrap);
 
+  // ---------- TCO a 5 años ----------
+  seccion.appendChild(el("h3", "", "Cálculo del TCO a 5 años"));
+  const tco = TCO[clave];
+  seccion.appendChild(el("p", "nota", "Supuestos: " + tco.supuestos));
+  const wrapT = el("div", "tabla-wrap");
+  const tablaT = el("table");
+  const filaT = el("tr");
+  ["ERP", "Cuota mensual (€)", "Meses", "Implantación y formación (€)", "Extras (€)", "TCO 5 años (€)", "Detalle de la cuota"].forEach(function (t) {
+    filaT.appendChild(el("th", "", t));
+  });
+  const theadT = el("thead");
+  theadT.appendChild(filaT);
+  tablaT.appendChild(theadT);
+  const tbodyT = el("tbody");
+  tco.filas.forEach(function (f) {
+    const MESES = 60;
+    const total = f.cuotaMes * MESES + f.implantacion + f.extras;
+    const tr = el("tr");
+    tr.appendChild(el("td", "texto", f.erp));
+    tr.appendChild(el("td", "", euros(f.cuotaMes)));
+    tr.appendChild(el("td", "", String(MESES)));
+    tr.appendChild(el("td", "", euros(f.implantacion)));
+    tr.appendChild(el("td", "", euros(f.extras)));
+    tr.appendChild(el("td", "total", euros(total)));
+    tr.appendChild(el("td", "texto", f.detalle));
+    tbodyT.appendChild(tr);
+  });
+  tablaT.appendChild(tbodyT);
+  wrapT.appendChild(tablaT);
+  seccion.appendChild(wrapT);
+
   // ---------- Ranking ----------
   seccion.appendChild(el("h3", "", "Resultado"));
   const ranking = el("div", "ranking");
@@ -98,7 +152,7 @@ function construirEmpresa(clave) {
 
   // ---------- Justificación ----------
   seccion.appendChild(el("h3", "", "Justificación de las puntuaciones"));
-  seccion.appendChild(el("p", "nota", "La valoración se toma de la matriz. Rellena la información y la fuente en js/datos.js."));
+  seccion.appendChild(el("p", "nota", "La valoración se toma de la matriz. Si cambias una nota, revisa que la explicación siga siendo coherente (js/datos.js)."));
   const wrapJ = el("div", "tabla-wrap");
   const tablaJ = el("table", "justificacion");
   const theadJ = el("thead");
@@ -135,9 +189,16 @@ function recalcular(clave) {
   const seccion = document.getElementById(clave);
   const totales = ERPS.map(function () { return 0; });
 
+  let sumaPesos = 0;
+  CRITERIOS.forEach(function (c) { sumaPesos += empresa.pesos[c.id]; });
+  const celdaSuma = seccion.querySelector("td.suma-pesos");
+  celdaSuma.textContent = String(sumaPesos);
+  celdaSuma.title = sumaPesos === 100 ? "" : "Los pesos deberían sumar 100";
+  celdaSuma.style.color = sumaPesos === 100 ? "" : "#b00020";
+
   CRITERIOS.forEach(function (c) {
     ERPS.forEach(function (erp, i) {
-      const pts = ponderada(empresa.valoraciones[c.id][i], c.peso);
+      const pts = ponderada(empresa.valoraciones[c.id][i], empresa.pesos[c.id]);
       totales[i] += pts;
       const span = seccion.querySelector('.puntos[data-criterio="' + c.id + '"][data-erp="' + i + '"]');
       span.textContent = formato(pts) + " pts";

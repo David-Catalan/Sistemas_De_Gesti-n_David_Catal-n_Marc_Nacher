@@ -26,4 +26,4 @@ actividad01-erp/
 
 ## Autor
 
-(tu nombre)
+David Catalán y Marc Nacher
